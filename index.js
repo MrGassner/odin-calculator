@@ -46,14 +46,21 @@ function eraseNum() {
 //Handles all the equal functions
 function equalHandler() {
 
-    secondNum = Number(result.innerHTML);
-    calculation.innerHTML = `${calculation.innerHTML} ${secondNum}=`;
-    total = doMath(firstOperator);
-    result.innerHTML = total;
-    firstNum = total
+    if (!calculation.innerHTML.includes('=')) {
+        secondNum = Number(result.innerHTML);
+        calculation.innerHTML = `${calculation.innerHTML} ${secondNum}=`;
+        total = doMath(firstOperator);
+        result.innerHTML = total;
+        firstNum = total
 
-    calculationOff = true;
-    clearResult = true;
+        calculationOff = true;
+        clearResult = true;
+
+    } else {
+        calculation.innerHTML = `${firstNum} ${firstOperator} ${secondNum}=`
+        firstNum = doMath(firstOperator)  
+        result.innerHTML = firstNum
+    }
 }
 
 
@@ -65,7 +72,7 @@ function resultNumber(number) {
     if (result.innerHTML === '0' || clearResult === true) {
         clearResult = false;
         result.innerHTML = number;
-        
+
     } else {
         result.innerHTML = `${result.innerHTML}${number}`;
     };
