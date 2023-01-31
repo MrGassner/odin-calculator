@@ -14,6 +14,7 @@ body {
     padding: 0;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
+    background-color:rgb(129, 128, 128);
 }
 
 .container {
@@ -23,7 +24,6 @@ body {
     width: fit-content;
     background-color: rgb(211, 211, 211);
     padding: 10px;
-    border: solid 1px #202023;
     border-radius: 5px;
 }
 
@@ -60,8 +60,10 @@ body {
 .calcButtons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: .2em
+    gap: .5em;
+    filter: drop-shadow(2px 2px 0.2px #2e2f30);
 }
+
 
 .calcHistory {
     width: 500px;
@@ -72,7 +74,7 @@ body {
 
 h1 {
     font-size: 3rem;
-    margin: 0;
+    margin: 10px;
     padding: 0;
     text-align: center;
 }

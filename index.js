@@ -1,11 +1,10 @@
 const result = document.querySelector('.result');
 const calculation = document.querySelector('.calculation');
 let clearResult = false;
-let firstOperator = null;
+let calculationOff = false;
 let firstNum = 0;
 let secondNum = 0;
 let total = 0;
-let dot = false;
 
 document.addEventListener('keydown', event => KeyEvent(event.key));
 document.querySelector('.clear').addEventListener('click', () => clearDisplay());
@@ -14,10 +13,8 @@ document.querySelector('.backspace').addEventListener('click', () => eraseNum())
 document.querySelector('.changeSignal').addEventListener('click', () => changeSignal());
 document.querySelector('.dot').addEventListener('click', () => dotHandler());
 
-    
-
 document.querySelectorAll('.numbers').forEach(btn => btn.addEventListener('click', event => {
-    numberToDisplay(event.target.innerHTML)
+    resultNumber(event.target.innerHTML)
 }));
 
 document.querySelectorAll('.operations').forEach(btn => btn.addEventListener('click', event => {
@@ -25,15 +22,15 @@ document.querySelectorAll('.operations').forEach(btn => btn.addEventListener('cl
 }));
 
 
+// Display cleaner buttons 
 function clearDisplay() {
     result.innerHTML = 0;
     calculation.innerHTML = 0;
     clearResult = false;
-    firstOperator = null;
+    calculationOff = false;
     firstNum = 0;
     secondNum = 0;
     total = 0;
-    dot = false;
 };
 
 function clearEntryDisplay() {
@@ -45,8 +42,35 @@ function eraseNum() {
     erased === ''? result.innerHTML = 0: result.innerHTML = erased
 };
 
-function dotHandler() {
-    if (!result.innerHTML.includes('.')) result.innerHTML = `${result.innerHTML}.`;       
+
+//Handles all the equal functions
+function equalHandler() {
+
+    secondNum = Number(result.innerHTML);
+    calculation.innerHTML = `${calculation.innerHTML} ${secondNum}=`;
+    total = doMath(firstOperator);
+    result.innerHTML = total;
+    firstNum = total
+
+    calculationOff = true;
+    clearResult = true;
+}
+
+
+// Manage numbers that are being written to result display 
+function resultNumber(number) {
+
+    if (calculation.innerHTML.includes('=')) clearDisplay();
+
+    if (result.innerHTML === '0' || clearResult === true) {
+        clearResult = false;
+        result.innerHTML = number;
+        
+    } else {
+        result.innerHTML = `${result.innerHTML}${number}`;
+    };
+
+    calculationOff = false;
 }
 
 function changeSignal() {
@@ -57,49 +81,43 @@ function changeSignal() {
     }
 }
 
-function numberToDisplay(number) {
-    if (calculation.innerHTML.includes('=')) clearDisplay()
+function dotHandler() {
+    if (!result.innerHTML.includes('.')) result.innerHTML = `${result.innerHTML}.`;       
+}
+5+5
 
-    if (result.innerHTML === '0' || clearResult === true) {
-        clearResult = false;
-        result.innerHTML = number
-        
-    } else {
-        result.innerHTML = `${result.innerHTML}${number}`
-    }
+// Add numbers to calculation display 
+function toCalculation(number, operator) {
+    firstNum = number;
+    firstOperator = operator;
+    total = 0;
+
+    calculation.innerHTML = `${firstNum} ${firstOperator}`
 }
 
-function equalHandler() {
-    if (calculation.innerHTML.includes('=')) {
-        firstNum = total;    
+
+// Decides when to do the math operations
+function operations(operator) {
+    let resultNumber = Number(result.innerHTML)
+    if (calculationOff === true) return toCalculation(firstNum, operator)
+
+    if (calculation.innerHTML === '0') {
+        firstNum = resultNumber;
+        firstOperator = operator;
+
+        toCalculation(firstNum, firstOperator);
+
     } else {
-       secondNum = Number(result.innerHTML) 
+        secondNum = resultNumber;
+        total = doMath(firstOperator)
+        result.innerHTML = total
+        toCalculation(total, operator)
+        calculationOff = true;
     }
-
-    calculation.innerHTML = `${firstNum} ${firstOperator} ${secondNum} =`
-    total = doMath(firstOperator);
-
-    result.innerHTML = total;
+    
     clearResult = true;
 }
 
-function operations(operator) {
-
-    if (calculation.innerHTML == 0) {
-        calculation.innerHTML = `${result.innerHTML} ${operator}`
-        firstOperator = operator;
-        firstNum = Number(result.innerHTML);
-
-    } else {
-        total = doMath(firstOperator);
-        firstNum = total;
-        firstOperator = operator;
-
-        result.innerHTML = total;
-        calculation.innerHTML = `${total} ${operator}`;
-    }
-    clearResult = true
-}
 
 // Math operations 
 function add(a, b) {
@@ -137,9 +155,11 @@ function doMath(operator) {
     }
 }
 
+
+// keyboard handlers 
 function KeyEvent(key) {
 
-    if (Number.isInteger(Number(key))) numberToDisplay(key);
+    if (Number.isInteger(Number(key))) resultNumber(key);
 
     switch (key) {
         case 'Backspace':
