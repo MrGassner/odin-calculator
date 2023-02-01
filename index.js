@@ -50,16 +50,18 @@ function equalHandler() {
         secondNum = Number(result.innerHTML);
         calculation.innerHTML = `${calculation.innerHTML} ${secondNum}=`;
         total = doMath(firstOperator);
+        if (total > 9999999999) total = total.toExponential(5);
         result.innerHTML = total;
-        firstNum = total
+        firstNum = total;
 
         calculationOff = true;
         clearResult = true;
 
     } else {
-        calculation.innerHTML = `${firstNum} ${firstOperator} ${secondNum}=`
-        firstNum = doMath(firstOperator)  
-        result.innerHTML = firstNum
+        calculation.innerHTML = `${firstNum} ${firstOperator} ${secondNum}=`;
+        firstNum = doMath(firstOperator);
+        if (firstNum > 9999999999) firstNum = firstNum.toExponential(5)  
+        result.innerHTML = firstNum;
     }
 }
 
@@ -106,6 +108,7 @@ function toCalculation(number, operator) {
 
 // Decides when to do the math operations
 function operations(operator) {
+    
     let resultNumber = Number(result.innerHTML)
     if (calculationOff === true) return toCalculation(firstNum, operator)
 
@@ -118,6 +121,7 @@ function operations(operator) {
     } else {
         secondNum = resultNumber;
         total = doMath(firstOperator);
+        if (total > 9999999999) total = total.toExponential(5)
         result.innerHTML = total;
         toCalculation(total, operator);
         calculationOff = true;
