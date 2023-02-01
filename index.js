@@ -43,7 +43,7 @@ function eraseNum() {
 };
 
 
-//Handles all the equal functions
+//Handles all the equal button functionalities
 function equalHandler() {
 
     if (!calculation.innerHTML.includes('=')) {
@@ -67,6 +67,7 @@ function equalHandler() {
 // Manage numbers that are being written to result display 
 function resultNumber(number) {
 
+    if (result.innerHTML.length === 10 && clearResult === false) return 
     if (calculation.innerHTML.includes('=')) clearDisplay();
 
     if (result.innerHTML === '0' || clearResult === true) {
@@ -91,7 +92,7 @@ function changeSignal() {
 function dotHandler() {
     if (!result.innerHTML.includes('.')) result.innerHTML = `${result.innerHTML}.`;       
 }
-5+5
+
 
 // Add numbers to calculation display 
 function toCalculation(number, operator) {
@@ -116,9 +117,9 @@ function operations(operator) {
 
     } else {
         secondNum = resultNumber;
-        total = doMath(firstOperator)
-        result.innerHTML = total
-        toCalculation(total, operator)
+        total = doMath(firstOperator);
+        result.innerHTML = total;
+        toCalculation(total, operator);
         calculationOff = true;
     }
     
